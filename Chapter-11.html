@@ -186,6 +186,7 @@ pre code {
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(dslabs)
+library(pander)
 data(outlier_example)
 str(outlier_example)</code></pre>
 <pre><code>##  num [1:500] 5.59 5.8 5.54 6.15 5.83 5.54 5.87 5.93 5.89 5.67 ...</code></pre>
@@ -320,12 +321,61 @@ data(&quot;reported_heights&quot;)</code></pre>
 <pre><code>## Warning in mask$eval_all_mutate(quo): 강제형변환에 의해 생성된 NA 입니다</code></pre>
 <pre class="r"><code>#&gt; Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</code></pre>
 <p>Note that we get a warning about NAs. This is because some of the self reported heights were not numbers. We can see why we get these:</p>
-<pre class="r"><code>reported_heights %&gt;% filter(is.na(height)) %&gt;%  head()</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["time_stamp"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]},{"label":["height"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["original_heights"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"2014-09-02 15:16:28","2":"Male","3":"NA","4":"5' 4\"","_rn_":"1"},{"1":"2014-09-02 15:16:37","2":"Female","3":"NA","4":"165cm","_rn_":"2"},{"1":"2014-09-02 15:16:52","2":"Male","3":"NA","4":"5'7","_rn_":"3"},{"1":"2014-09-02 15:16:56","2":"Male","3":"NA","4":">9000","_rn_":"4"},{"1":"2014-09-02 15:16:56","2":"Male","3":"NA","4":"5'7\"","_rn_":"5"},{"1":"2014-09-02 15:17:09","2":"Female","3":"NA","4":"5'3\"","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre class="r"><code>reported_heights %&gt;% filter(is.na(height)) %&gt;%  head() %&gt;% pander()</code></pre>
+<table style="width:82%;">
+<colgroup>
+<col width="30%" />
+<col width="12%" />
+<col width="12%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">time_stamp</th>
+<th align="center">sex</th>
+<th align="center">height</th>
+<th align="center">original_heights</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">2014-09-02 15:16:28</td>
+<td align="center">Male</td>
+<td align="center">NA</td>
+<td align="center">5’ 4”</td>
+</tr>
+<tr class="even">
+<td align="center">2014-09-02 15:16:37</td>
+<td align="center">Female</td>
+<td align="center">NA</td>
+<td align="center">165cm</td>
+</tr>
+<tr class="odd">
+<td align="center">2014-09-02 15:16:52</td>
+<td align="center">Male</td>
+<td align="center">NA</td>
+<td align="center">5’7</td>
+</tr>
+<tr class="even">
+<td align="center">2014-09-02 15:16:56</td>
+<td align="center">Male</td>
+<td align="center">NA</td>
+<td align="center">&gt;9000</td>
+</tr>
+<tr class="odd">
+<td align="center">2014-09-02 15:16:56</td>
+<td align="center">Male</td>
+<td align="center">NA</td>
+<td align="center">5’7”</td>
+</tr>
+<tr class="even">
+<td align="center">2014-09-02 15:17:09</td>
+<td align="center">Female</td>
+<td align="center">NA</td>
+<td align="center">5’3”</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>#&gt;            time_stamp    sex height original_heights
 #&gt; 1 2014-09-02 15:16:28   Male     NA            5&#39; 4&quot;
 #&gt; 2 2014-09-02 15:16:37 Female     NA            165cm
@@ -339,12 +389,42 @@ data(&quot;reported_heights&quot;)</code></pre>
 <pre class="r"><code>reported_heights %&gt;% 
   group_by(sex) %&gt;%
   summarize(average = mean(height), sd = sd(height),
-            median = median(height), MAD = mad(height))</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["average"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["median"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["MAD"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Female","2":"63.40779","3":"27.93076","4":"64.2","5":"4.046164"},{"1":"Male","2":"103.37705","3":"529.86240","4":"70.0","5":"4.447800"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+            median = median(height), MAD = mad(height)) %&gt;%
+  pander()</code></pre>
+<table style="width:62%;">
+<colgroup>
+<col width="12%" />
+<col width="13%" />
+<col width="11%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">sex</th>
+<th align="center">average</th>
+<th align="center">sd</th>
+<th align="center">median</th>
+<th align="center">MAD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Female</td>
+<td align="center">63.41</td>
+<td align="center">27.93</td>
+<td align="center">64.2</td>
+<td align="center">4.046</td>
+</tr>
+<tr class="even">
+<td align="center">Male</td>
+<td align="center">103.4</td>
+<td align="center">529.9</td>
+<td align="center">70</td>
+<td align="center">4.448</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>#&gt; # A tibble: 2 x 5
 #&gt;   sex    average    sd median   MAD
 #&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -352,12 +432,91 @@ data(&quot;reported_heights&quot;)</code></pre>
 #&gt; 2 Male     103.  530.    70    4.45</code></pre>
 <p>This suggests that we have outliers, which is confirmed by creating a boxplot:</p>
 <p>We can see some rather extreme values. To see what these values are, we can quickly look at the largest values using the arrange function:</p>
-<pre class="r"><code>reported_heights %&gt;% arrange(desc(height)) %&gt;% top_n(10, height)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["time_stamp"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]},{"label":["height"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["original_heights"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"2014-09-03 23:55:37","2":"Male","3":"11111","4":"11111"},{"1":"2016-04-10 22:45:49","2":"Male","3":"10000","4":"10000"},{"1":"2015-08-10 03:10:01","2":"Male","3":"684","4":"684"},{"1":"2015-02-27 18:05:06","2":"Male","3":"612","4":"612"},{"1":"2014-09-02 15:16:41","2":"Male","3":"511","4":"511"},{"1":"2014-09-07 20:53:43","2":"Male","3":"300","4":"300"},{"1":"2014-11-28 12:18:40","2":"Male","3":"214","4":"214"},{"1":"2017-04-03 16:16:57","2":"Male","3":"210","4":"210"},{"1":"2015-11-24 10:39:45","2":"Male","3":"192","4":"192"},{"1":"2014-12-26 10:00:12","2":"Male","3":"190","4":"190"},{"1":"2016-11-06 10:21:02","2":"Female","3":"190","4":"190"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre class="r"><code>reported_heights %&gt;% arrange(desc(height)) %&gt;% top_n(10, height) %&gt;% pander()</code></pre>
+<table style="width:82%;">
+<colgroup>
+<col width="30%" />
+<col width="12%" />
+<col width="12%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">time_stamp</th>
+<th align="center">sex</th>
+<th align="center">height</th>
+<th align="center">original_heights</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">2014-09-03 23:55:37</td>
+<td align="center">Male</td>
+<td align="center">11111</td>
+<td align="center">11111</td>
+</tr>
+<tr class="even">
+<td align="center">2016-04-10 22:45:49</td>
+<td align="center">Male</td>
+<td align="center">10000</td>
+<td align="center">10000</td>
+</tr>
+<tr class="odd">
+<td align="center">2015-08-10 03:10:01</td>
+<td align="center">Male</td>
+<td align="center">684</td>
+<td align="center">684</td>
+</tr>
+<tr class="even">
+<td align="center">2015-02-27 18:05:06</td>
+<td align="center">Male</td>
+<td align="center">612</td>
+<td align="center">612</td>
+</tr>
+<tr class="odd">
+<td align="center">2014-09-02 15:16:41</td>
+<td align="center">Male</td>
+<td align="center">511</td>
+<td align="center">511</td>
+</tr>
+<tr class="even">
+<td align="center">2014-09-07 20:53:43</td>
+<td align="center">Male</td>
+<td align="center">300</td>
+<td align="center">300</td>
+</tr>
+<tr class="odd">
+<td align="center">2014-11-28 12:18:40</td>
+<td align="center">Male</td>
+<td align="center">214</td>
+<td align="center">214</td>
+</tr>
+<tr class="even">
+<td align="center">2017-04-03 16:16:57</td>
+<td align="center">Male</td>
+<td align="center">210</td>
+<td align="center">210</td>
+</tr>
+<tr class="odd">
+<td align="center">2015-11-24 10:39:45</td>
+<td align="center">Male</td>
+<td align="center">192</td>
+<td align="center">192</td>
+</tr>
+<tr class="even">
+<td align="center">2014-12-26 10:00:12</td>
+<td align="center">Male</td>
+<td align="center">190</td>
+<td align="center">190</td>
+</tr>
+<tr class="odd">
+<td align="center">2016-11-06 10:21:02</td>
+<td align="center">Female</td>
+<td align="center">190</td>
+<td align="center">190</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>#&gt;             time_stamp    sex height original_heights
 #&gt; 1  2014-09-03 23:55:37   Male  11111            11111
 #&gt; 2  2016-04-10 22:45:49   Male  10000            10000
